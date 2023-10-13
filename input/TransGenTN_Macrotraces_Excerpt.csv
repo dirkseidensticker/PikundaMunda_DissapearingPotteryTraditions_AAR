@@ -1,0 +1,85 @@
+"ID","OBJ","DIAGNOSTIC","POSITION","FACE","ORIENTATION","FEATURE","FEATURE_DETAIL","NOTES","MERGE","N"
+309,"MUN 87/2-1-1-2:1","d","wall",NA,"helic","fissure/crack/break","break(s)",NA,"wall  helic fissure/crack/break",1
+309,"MUN 87/2-1-1-2:1","d","base",NA,"concentric","fissure/crack/break","break(s)","base broken off","base  concentric fissure/crack/break",1
+79,"MUN 87/2-1-1-2:2 -4:3",NA,"rim","break","diagonal","lamination","lamination",NA,"rim break diagonal lamination",1
+79,"MUN 87/2-1-1-2:2 -4:3","d","wall",NA,"helic","fissure/crack/break","break(s)",NA,"wall  helic fissure/crack/break",1
+79,"MUN 87/2-1-1-2:2 -4:3","d","base",NA,"concentric","fissure/crack/break","break(s)","base broken off","base  concentric fissure/crack/break",1
+80,"MUN 87/2-1-1-4:2",NA,"rim","inside","horizontal","impression(s)","impression(s)",NA,"rim inside horizontal impression(s)",1
+80,"MUN 87/2-1-1-4:2",NA,"wall","inside","horizontal","polishing facets","polishing facets","small ridges (pebble or nut) used small object","wall inside horizontal polishing facets",1
+80,"MUN 87/2-1-1-4:2",NA,"wall/base",NA,NA,"coil(s)","coil(s)","according to PhD added coil","wall/base   coil(s)",1
+80,"MUN 87/2-1-1-4:2",NA,"base","inside",NA,"thickening","thickening",NA,"base inside  thickening",1
+80,"MUN 87/2-1-1-4:2","d","wall","inside","helic","fissure/crack/break","break(s)","fissures/cracks (inside) + break(s)","wall inside helic fissure/crack/break",1
+80,"MUN 87/2-1-1-4:2","d","base",NA,"concentric","fissure/crack/break","break(s)",NA,"base  concentric fissure/crack/break",1
+234,"MUN 87/2-1-1-4:5,6,8","d","wall",NA,"helic + vertical","fissure/crack/break","break(s)",NA,"wall  helic + vertical fissure/crack/break",1
+234,"MUN 87/2-1-1-4:5,6,8","d","base",NA,"concentric","fissure/crack/break","break(s)","base broken off","base  concentric fissure/crack/break",1
+234,"MUN 87/2-1-1-4:5,6,8",NA,"base",NA,NA,"thinning","thinning","Bodenscherbe deutl. dünner als Wand; W ~10mm, B ~6-7mm","base   thinning",1
+235,"MUN 87/2-1-1-4:7",NA,"wall/base","inside","horizontal","joint","joint",NA,"wall/base inside horizontal joint",1
+235,"MUN 87/2-1-1-4:7","d","base",NA,"concentric","fissure/crack/break","break(s)","plug Boden?","base  concentric fissure/crack/break",1
+113,"MUN 87/2-1-1-5:2",NA,"wall","inside","horizontal","polishing facets","polishing facets",NA,"wall inside horizontal polishing facets",1
+113,"MUN 87/2-1-1-5:2",NA,"base","inside",NA,"thickening","thickening",NA,"base inside  thickening",1
+113,"MUN 87/2-1-1-5:2",NA,"wall","break","vertical","lamination","lamination",NA,"wall break vertical lamination",1
+113,"MUN 87/2-1-1-5:2","d","wall","outside","helic","fissure/crack/break","fissures/cracks",NA,"wall outside helic fissure/crack/break",1
+113,"MUN 87/2-1-1-5:2","d","base",NA,"concentric +  radial","fissure/crack/break",NA,"fissures/cracks (radial) + break(s)","base  concentric +  radial fissure/crack/break",1
+239,"MUN 87/2-1-1-7:2","d","wall","inside","helic","fissure/crack/break","fissures/cracks",NA,"wall inside helic fissure/crack/break",1
+239,"MUN 87/2-1-1-7:2",NA,"wall/base","inside","horizontal","compression folds","compression folds",NA,"wall/base inside horizontal compression folds",1
+239,"MUN 87/2-1-1-7:2","d","base",NA,"concentric","fissure/crack/break","break(s)","base broken off","base  concentric fissure/crack/break",1
+236,"MUN 87/2-1-1-8:1","d","wall",NA,"vertical","fissure/crack/break","fissures/cracks","joint of ring?","wall  vertical fissure/crack/break",1
+236,"MUN 87/2-1-1-8:1",NA,"wall/base","inside","horizontal","compression folds","compression folds",NA,"wall/base inside horizontal compression folds",1
+236,"MUN 87/2-1-1-8:1","d","base",NA,"radial","fissure/crack/break","fissures/cracks",NA,"base  radial fissure/crack/break",1
+236,"MUN 87/2-1-1-8:1",NA,"wall/base","outside",NA,"thickening","thickening",NA,"wall/base outside  thickening",1
+238,"MUN 87/2-1-1-8:2","d","wall","inside + outside","helic + vertical","fissure/crack/break","fissures/cracks","vertical fissues (inside + outside) (joint of main ring?) + helical fissues (inside)","wall inside + outside helic + vertical fissure/crack/break",1
+238,"MUN 87/2-1-1-8:2","d","base","inside + outside","concentric","fissure/crack/break","fissures/cracks",NA,"base inside + outside concentric fissure/crack/break",1
+238,"MUN 87/2-1-1-8:2","d","base","outside","x","paddel marks","paddel marks",NA,"base outside x paddel marks",1
+238,"MUN 87/2-1-1-8:2","d","base",NA,"asymmetric","shape",NA,NA,NA,NA
+237,"MUN 87/2-1-1-8:3","d","wall",NA,"horizontal + vertical","fissure/crack/break","break(s)",NA,"wall  horizontal + vertical fissure/crack/break",1
+115,"MUN 87/2-1-3:10","d","base","outside","x","paddel marks","paddel marks",NA,"base outside x paddel marks",1
+115,"MUN 87/2-1-3:10","d","base",NA,"asymmetric","shape",NA,NA,NA,NA
+115,"MUN 87/2-1-3:10","d","base","inside","x","pounding marks","pounding marks",NA,"base inside x pounding marks",1
+115,"MUN 87/2-1-3:10",NA,"base",NA,NA,"thinning","thinning","zeichen für pounding?","base   thinning",1
+115,"MUN 87/2-1-3:10",NA,"rim","inside","horizontal","polishing facets","polishing facets",NA,"rim inside horizontal polishing facets",1
+115,"MUN 87/2-1-3:10",NA,"wall","inside","helic","polishing facets","polishing facets",NA,"wall inside helic polishing facets",1
+115,"MUN 87/2-1-3:10",NA,"wall","inside","helic","scraping","scraping",NA,"wall inside helic scraping",1
+228,"MUN 87/2-1-3:13a",NA,"wall","inside","wavy","porosity","porosity",NA,"wall inside wavy porosity",1
+114,"MUN 87/2-1-3:7",NA,"wall","inside","horizontal","polishing facets","polishing facets",NA,"wall inside horizontal polishing facets",1
+114,"MUN 87/2-1-3:7",NA,"wall/base","inside","horizontal","thickening","thickening",NA,"wall/base inside horizontal thickening",1
+114,"MUN 87/2-1-3:7",NA,"base",NA,NA,"thinning","thinning",NA,"base   thinning",1
+114,"MUN 87/2-1-3:7",NA,"wall","break","diagonal","lamination","lamination",NA,"wall break diagonal lamination",1
+114,"MUN 87/2-1-3:7","d","base",NA,"concentric","fissure/crack/break","break(s)",NA,"base  concentric fissure/crack/break",1
+232,"MUN 87/2-1-3:8",NA,"rim/wall","inside","horizontal","thickening","thickening",NA,"rim/wall inside horizontal thickening",1
+232,"MUN 87/2-1-3:8","d","base","outside","x","paddel marks","paddel marks",NA,"base outside x paddel marks",1
+233,"MUN 87/2-1-3:9",NA,"wall","inside","diagonal","porosity","porosity",NA,"wall inside diagonal porosity",1
+345,"MUN 87/2-1-3-1:1a","d","wall","break","diagonal","lamination","lamination",NA,"wall break diagonal lamination",1
+345,"MUN 87/2-1-3-1:1a","d","base",NA,"concentric","fissure/crack/break","break(s)",NA,"base  concentric fissure/crack/break",1
+227,"MUN 87/2-1-3-1:1b","d","wall","break","vertical","lamination","lamination",NA,"wall break vertical lamination",1
+227,"MUN 87/2-1-3-1:1b","d","wall",NA,"horizontal","fissure/crack/break","break(s)",NA,"wall  horizontal fissure/crack/break",1
+224,"MUN 87/2-1-3-1:2","d","wall","inside + outside","helic + horizontal","fissure/crack/break","fissures/cracks",NA,"wall inside + outside helic + horizontal fissure/crack/break",1
+224,"MUN 87/2-1-3-1:2","d","base",NA,"concentric","fissure/crack/break","break(s)",NA,"base  concentric fissure/crack/break",1
+310,"MUN 87/2-1-3-2:3","d","wall","break","vertical","lamination","lamination",NA,"wall break vertical lamination",1
+310,"MUN 87/2-1-3-2:3","d","base",NA,"radial","fissure/crack/break","break(s)",NA,"base  radial fissure/crack/break",1
+311,"MUN 87/2-1-3-4:11","d","wall","inside","helic + horizontal","fissure/crack/break","fissures/cracks",NA,"wall inside helic + horizontal fissure/crack/break",1
+311,"MUN 87/2-1-3-4:11","d","base",NA,"concentric","fissure/crack/break","break(s)",NA,"base  concentric fissure/crack/break",1
+225,"MUN 87/2-1-3-4:4",NA,"wall","inside","diagonal","porosity","porosity",NA,"wall inside diagonal porosity",1
+225,"MUN 87/2-1-3-4:4","d","wall",NA,"helic","fissure/crack/break","break(s)",NA,"wall  helic fissure/crack/break",1
+231,"MUN 87/2-1-3-5:12","d","base",NA,"asymmetric","shape","asymmetric",NA,"base  asymmetric shape",1
+312,"MUN 87/2-1-3-5:5",NA,"wall/base",NA,"horizontal","thinning","thinning",NA,"wall/base  horizontal thinning",1
+312,"MUN 87/2-1-3-5:5",NA,"base","inside",NA,"thickening","thickening",NA,"base inside  thickening",1
+226,"MUN 87/2-1-3-6:15","d","wall","inside","helic","fissure/crack/break","fissures/cracks","fissures/cracks (helic) + break(s)","wall inside helic fissure/crack/break",1
+226,"MUN 87/2-1-3-6:15","d","base",NA,"asymmetric","shape","asymmetric",NA,"base  asymmetric shape",1
+230,"MUN 87/2-1-3-6:6","d","base",NA,"concentric +  radial","fissure/crack/break","break(s)","fissures/cracks (radial) + break(s) (concentric +  radial)","base  concentric +  radial fissure/crack/break",1
+230,"MUN 87/2-1-3-6:6","d","base",NA,"asymmetric","shape","asymmetric",NA,"base  asymmetric shape",1
+3,"PIK 87/1:1","d","wall",NA,"helic","fissure/crack/break","break(s)","cf. große Schale","wall  helic fissure/crack/break",1
+30,"PIK 87/1:12",NA,"base","inside","x","pounding marks","pounding marks",NA,"base inside x pounding marks",1
+109,"PIK 87/1-10:7 -11:1 /I-11:4 /I-12:2",NA,"wall",NA,"helic","fissure/crack/break","break(s)",NA,"wall  helic fissure/crack/break",1
+109,"PIK 87/1-10:7 -11:1 /I-11:4 /I-12:2",NA,"wall","break","diagonal","lamination","lamination","looks somewhat like N-type coiling even! (to be checked)","wall break diagonal lamination",1
+11,"PIK 87/1-4:20",NA,"wall","inside","horizontal","scraping","scraping",NA,"wall inside horizontal scraping",1
+11,"PIK 87/1-4:20","d","wall","break","vertical","lamination","lamination",NA,"wall break vertical lamination",1
+11,"PIK 87/1-4:20","d","wall","outside","horizontal","fissure/crack/break","fissures/cracks",NA,"wall outside horizontal fissure/crack/break",1
+320,"PIK 87/1-7:1 -8:4",NA,"rim/wall","inside","horizontal","polishing facets","polishing facets",NA,"rim/wall inside horizontal polishing facets",1
+320,"PIK 87/1-7:1 -8:4",NA,"wall","inside","horizontal + helic","fissure/crack/break","fissures/cracks","fissures/cracks (inside + horizontal) + break(s) (helic)","wall inside horizontal + helic fissure/crack/break",1
+112,"PIK 87/1-8:1 /I-9:1",NA,"wall","inside","helic","fissure/crack/break","fissures/cracks","fissures/cracks + break(s)","wall inside helic fissure/crack/break",1
+112,"PIK 87/1-8:1 /I-9:1",NA,"wall/base","break","horizontal","joint","joint","joint between upper part & base","wall/base break horizontal joint",1
+112,"PIK 87/1-8:1 /I-9:1",NA,"wall","inside","horizontal","polishing facets","polishing facets",NA,"wall inside horizontal polishing facets",1
+112,"PIK 87/1-8:1 /I-9:1",NA,"base","outside","x","paddel marks","paddel marks",NA,"base outside x paddel marks",1
+112,"PIK 87/1-8:1 /I-9:1",NA,"wall","break","vertical","lamination","lamination",NA,"wall break vertical lamination",1
+222,"PIK 87/2-4:73",NA,"wall",NA,"horizontal + helic","fissure/crack/break","break(s)",NA,"wall  horizontal + helic fissure/crack/break",1
+222,"PIK 87/2-4:73",NA,"wall/base","break","horizontal","joint","joint",NA,"wall/base break horizontal joint",1

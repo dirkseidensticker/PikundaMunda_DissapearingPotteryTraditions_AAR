@@ -1,0 +1,38 @@
+
+Link between the cluster variable and the categorical variables (chi-square test)
+=================================================================================
+                                 p.value df
+wall_scraping               7.734565e-05  8
+wall_fissure/crack/break    1.342276e-04 24
+wall_polishing.facets       2.254679e-03  8
+wall/base_joint             7.170132e-03  4
+base_fissure/crack/break    1.994649e-02 12
+wall/base_compression.folds 3.071141e-02  4
+base_paddel.marks           4.404700e-02  4
+
+Description of each cluster by the categories
+=============================================
+$`1`
+                                                           Cla/Mod Mod/Cla   Global    p.value   v.test
+wall_fissure/crack/break=wall_fissure/crack/break_vertical     100     100 4.545455 0.04545455 2.000424
+
+$`2`
+                                                             Cla/Mod Mod/Cla    Global     p.value   v.test
+wall_fissure/crack/break=wall_fissure/crack/break_horizontal     100     100  9.090909 0.004329004 2.853136
+wall_lamination=wall_lamination_vertical                          40     100 22.727273 0.043290043 2.020901
+
+$`3`
+                                                       Cla/Mod Mod/Cla   Global     p.value    v.test
+base_fissure/crack/break=concentric                  100.00000   68.75 50.00000 0.006191950  2.737440
+base_fissure/crack/break=base_fissure/crack/break.NA  28.57143   12.50 31.81818 0.004409419 -2.847283
+
+$`4`
+                                            Cla/Mod Mod/Cla   Global    p.value    v.test
+wall/base_joint=wall/base_joint_horizontal 66.66667     100 13.63636 0.01298701  2.484125
+wall/base_joint=wall/base_joint.NA          0.00000       0 86.36364 0.01298701 -2.484125
+
+$`5`
+                                                  Cla/Mod Mod/Cla   Global    p.value   v.test
+wall_scraping=wall_scraping_helic                     100     100 4.545455 0.04545455 2.000424
+wall_polishing.facets=wall_polishing facets_helic     100     100 4.545455 0.04545455 2.000424
+
