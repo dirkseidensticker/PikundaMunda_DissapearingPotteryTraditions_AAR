@@ -11,26 +11,20 @@ library(tidyr)
 
 source("scripts/myfct.R")
 
-
-land10 <- rnaturalearth::ne_download(scale = 10, type = 'land', category = 'physical', returnclass = "sf")
-coast10 <- rnaturalearth::ne_download(scale = 10, type = 'coastline', category = 'physical', returnclass = "sf")
-rivers10 <- rnaturalearth::ne_download(scale = 10, type = "rivers_lake_centerlines", category = "physical", returnclass="sf")
-lakes10 <- rnaturalearth::ne_download(scale = 10, type = "lakes", category = "physical", returnclass="sf")
-boundary_lines_land10 <- rnaturalearth::ne_download(scale = 10, type = "boundary_lines_land", category = "cultural", returnclass="sf")
-
 bb <- c(xmin = 15, xmax = 19, ymin = -2, ymax = 3)
 
-osm.rivers.lines <- geojsonsf::geojson_sf("gis/OSM_river_lines.geojson") %>% 
-  sf::st_crop(bb) %>% 
-  sf::st_simplify(preserveTopology = FALSE, dTolerance = .02)
+land10 <- rnaturalearth::ne_download(scale = 10, type = 'land', category = 'physical', returnclass = "sf") %>% sf::st_crop(bb)
+coast10 <- rnaturalearth::ne_download(scale = 10, type = 'coastline', category = 'physical', returnclass = "sf") %>% sf::st_crop(bb)
+rivers10 <- rnaturalearth::ne_download(scale = 10, type = "rivers_lake_centerlines", category = "physical", returnclass="sf") %>% sf::st_crop(bb)
+lakes10 <- rnaturalearth::ne_download(scale = 10, type = "lakes", category = "physical", returnclass="sf") %>% sf::st_make_valid() %>% sf::st_crop(bb)
+boundary_lines_land10 <- rnaturalearth::ne_download(scale = 10, type = "boundary_lines_land", category = "cultural", returnclass="sf") %>% sf::st_crop(bb)
+
+osm.rivers.lines <- geojsonsf::geojson_sf("gis/OSM_river_lines.geojson") %>% sf::st_crop(bb)
 
 sf_use_s2(FALSE)
-
 osm.rivers.poly <- geojsonsf::geojson_sf("gis/OSM_river_lakes_poly.geojson") %>%
-  sf::st_make_valid() %>%
-  #sf::st_union() %>% 
-  sf::st_crop(bb) %>%
-  sf::st_simplify(dTolerance = .005)
+  sf::st_make_valid() %>% sf::st_crop(bb)
+sf_use_s2(TRUE)
 
 regions <- geojsonsf::geojson_sf("gis/regions.geojson")
 
@@ -128,6 +122,11 @@ for(j in 1:length(styles)){
   
   if (nrow(d) != 0) {
     d <- dplyr::filter(d, !grepl(paste0("\\(" , styles[j], "\\)"), d$POTTERY)) # remove cases in parantheses
+    
+    d <- d %>%
+      dplyr::mutate(C14AGE = as.numeric(C14AGE), 
+                    C14STD = as.numeric(C14STD)) %>%
+      dplyr::filter(C14AGE > 70 & !is.na(C14STD))
     
     res <- rcarbonsum(d, oxcalnorm = TRUE)
     

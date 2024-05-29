@@ -1,25 +1,25 @@
 # Fig. 1: Maps
 
-# TODO
-# Overview map with rainforest (cf White) & refugia
-# detailed map of Sangha/Likwala region (bbox PKM distribution) & vegetation satelite
-
 library(ggplot2)
 library(sf)
 library(tidyr)
 
-bb <- c(xmin = 14, xmax = 26, ymin = -6, ymax = 6)
+bb <- c(xmin = 4, xmax = 35, ymin = -20, ymax = 15)
 
 # data ----
-land10 <- rnaturalearth::ne_download(scale = 10, type = 'land', category = 'physical', returnclass = "sf")
-coast10 <- rnaturalearth::ne_download(scale = 10, type = 'coastline', category = 'physical', returnclass = "sf")
-rivers10 <- rnaturalearth::ne_download(scale = 10, type = "rivers_lake_centerlines", category = "physical", returnclass="sf")
-lakes10 <- rnaturalearth::ne_download(scale = 10, type = "lakes", category = "physical", returnclass="sf")
-boundary_lines_land10 <- rnaturalearth::ne_download(scale = 10, type = "boundary_lines_land", category = "cultural", returnclass="sf")
+land10 <- rnaturalearth::ne_download(scale = 10, type = 'land', category = 'physical', returnclass = "sf") %>% sf::st_crop(bb)
+coast10 <- rnaturalearth::ne_download(scale = 10, type = 'coastline', category = 'physical', returnclass = "sf") %>% sf::st_crop(bb)
+rivers10 <- rnaturalearth::ne_download(scale = 10, type = "rivers_lake_centerlines", category = "physical", returnclass="sf") %>% sf::st_crop(bb)
+lakes10 <- rnaturalearth::ne_download(scale = 10, type = "lakes", category = "physical", returnclass="sf") %>% sf::st_make_valid() %>% sf::st_crop(bb)
+boundary_lines_land10 <- rnaturalearth::ne_download(scale = 10, type = "boundary_lines_land", category = "cultural", returnclass="sf") %>% sf::st_crop(bb)
+
+bb <- c(xmin = 15.5, xmax = 18, ymin = -1.5, ymax = 2.5)
 
 osm.rivers.lines <- geojsonsf::geojson_sf("gis/OSM_river_lines.geojson") %>% sf::st_crop(bb)
+sf_use_s2(FALSE)
 osm.rivers.poly <- geojsonsf::geojson_sf("gis/OSM_river_lakes_poly.geojson") %>%
-  sf::st_make_valid() # %>% sf::st_union() %>% sf::st_crop(bb)
+  sf::st_make_valid() %>% sf::st_crop(bb)
+sf_use_s2(TRUE)
 osm.coast.line <- geojsonsf::geojson_sf("gis/OSM_coast_lines.geojson") %>% sf::st_crop(bb)
 
 sites <- data.table::fread(
@@ -41,7 +41,6 @@ c14 <- rbind(
     encoding = "UTF-8"),
   data.table::fread(
     "https://raw.githubusercontent.com/dirkseidensticker/PikundaMunda_BatalimoMaluba_AAR/main/data/aDRAC_new.csv", 
-    dec = ",", 
     encoding = "UTF-8")
 )
 # landcover data ----
@@ -127,8 +126,8 @@ plt.map1 <- ggplot() +
   shadowtext::geom_shadowtext(aes(x = 12, y = -1), label = "Gabon", fontface  = "bold", colour = "white", size = 3) + 
   shadowtext::geom_shadowtext(aes(x = 20, y = 6), label = "Central Africa Rep.", fontface  = "bold", colour = "white", size = 3) + 
   shadowtext::geom_shadowtext(aes(x = 14, y = -3.5), label = "Rep. Congo", fontface  = "bold", colour = "white", size = 3) + 
-  shadowtext::geom_shadowtext(aes(x = 24, y = -3), label = "Dem. Rep. Congo", fontface  = "bold", colour = "white", size = 3) + 
-  shadowtext::geom_shadowtext(aes(x = 17.5, y = -12), label = "Angola", fontface  = "bold", colour = "white", size = 3) + 
+  shadowtext::geom_shadowtext(aes(x = 20, y = -3), label = "Dem. Rep. Congo", fontface  = "bold", colour = "white", size = 3) + 
+  shadowtext::geom_shadowtext(aes(x = 17.5, y = -9), label = "Angola", fontface  = "bold", colour = "white", size = 3) + 
   
   # RIVER NAMES
   shadowtext::geom_shadowtext(aes(x = 22.25, y = 2.5), label = "CONGO", colour = "white", size = 2) + 
@@ -137,10 +136,13 @@ plt.map1 <- ggplot() +
   shadowtext::geom_shadowtext(aes(x = 15.75, y = 4), label = "KADÉÏ", colour = "white", size = 2, angle = -35) + 
   shadowtext::geom_shadowtext(aes(x = 22.75, y = -1.5), label = "TSHUAPA", colour = "white", size = 2, angle = -25) + 
 
-  coord_sf(xlim = c(6, 32), 
-           ylim = c(-16, 12)) + 
+  #coord_sf(xlim = c(6, 32), 
+  #         ylim = c(-16, 12)) + 
+  coord_sf(xlim = c(9, 25), 
+           ylim = c(-10, 8)) + 
   theme_bw() + 
-  theme(axis.title = element_blank())
+  theme(axis.title = element_blank(), 
+        panel.grid = element_blank())
 
 
 sites.text2 <- dplyr::filter(sites %>% dplyr::distinct(SITE, LAT, LONG), SITE %in% c(

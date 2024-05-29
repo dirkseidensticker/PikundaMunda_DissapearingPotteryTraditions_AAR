@@ -3,7 +3,7 @@ rcarbonsum <- function(a,
   
   cal = rcarbon::calibrate(x = a$C14AGE,
                            errors = a$C14STD,
-                           calCurves = 'intcal13', 
+                           calCurves = 'intcal20', 
                            ncores = ncores, 
                            normalised = FALSE) #running calibration over 3 cores
   
