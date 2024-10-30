@@ -17,7 +17,9 @@ ncores = (detectCores() - 1)
 c14 <- data.table::fread(
   "https://raw.githubusercontent.com/dirkseidensticker/aDRAC/master/aDRAC.csv", 
   encoding = "UTF-8"
-)
+) %>%
+  dplyr::mutate(C14AGE = as.numeric(C14AGE), 
+                C14STD = as.numeric(C14STD))
 
 sites <- data.table::fread(
   "https://raw.githubusercontent.com/dirkseidensticker/aSCAC/master/sites.csv", 
@@ -32,6 +34,21 @@ pottery <- data.table::fread(
   "https://raw.githubusercontent.com/dirkseidensticker/aSCAC/master/potterygroups.csv", 
   encoding = "UTF-8")
 
+bayes <- data.table::fread("https://raw.githubusercontent.com/dirkseidensticker/PikundaMunda_BatalimoMaluba_AAR/main/tbl/tbl_bayesphases_comparison.csv", encoding = "UTF-8") %>%
+  dplyr::filter(`Pottery Group` != "Ilambi") %>%
+  dplyr::select(1, 3, 5) %>%
+  dplyr::rename("POTTERY" = "Pottery Group", 
+                "FROM" = "Bayesian Start", 
+                "TO" = "Bayesian End")
+
+pottery <- rbind(
+  bayes %>% 
+    dplyr::left_join(pottery %>% dplyr::select(POTTERY, REGION, COL), by = "POTTERY"),
+  pottery %>%
+    dplyr::filter(!POTTERY %in% c(bayes %>% dplyr::pull(POTTERY))) %>%
+    dplyr::select(POTTERY,FROM,TO,REGION, COL))
+
+
 sites.meta <- sites %>% 
   dplyr::left_join(pottery, by = "POTTERY")
 
@@ -41,7 +58,7 @@ regions <- geojsonsf::geojson_sf("gis/regions.geojson")
 
 # spd & model testing ----
 
-min.14C.age <- 0 # rcarbonTest fails on 0 bp dates
+min.14C.age <- 70 # rcarbonTest fails on 0 bp dates
 n.bins <- 100 # time window for binning dates (in years) within the same site	
 n.simulations <- 1000 # nr of simulations
 timeRange = c(3000, 0) # set the timerange of analysis in calBP, older date first
@@ -226,9 +243,21 @@ regionalAnalysis <- function(c14,
 
 plot(regions)
 
+# add lower limit for data (only keep those that also fall into the timeRange) -----
+c14.cal.sel <- c14 %>%
+  dplyr::mutate(c14age = C14AGE,
+                c14std = C14STD) %>%
+  c14bazAAR::as.c14_date_list() %>%
+  c14bazAAR::calibrate(choices = "calrange") %>% # calibration
+  tidyr::unnest(cols = c("calrange")) %>%
+  dplyr::filter(from <= timeRange[1]) %>%
+  dplyr::distinct(LABNR) %>%
+  dplyr::pull(LABNR)
+
 # add region filter for only the Congo rainforest regions (A-H) 
 
 c14.sel <- c14 %>% 
+  dplyr::filter(LABNR %in% c14.cal.sel) %>%
   sf::st_as_sf(coords = c("LONG", "LAT"), # convert to sf
                crs = 4326, 
                remove = F, 
@@ -374,11 +403,11 @@ pottery.cent.freq <- as.data.frame(table(pottery.cent$AGE))
 pottery.cent.freq$Var1 <- as.numeric(as.character(pottery.cent.freq$Var1))
 # merge into meta tables
 pottery.cent.meta <- pottery.cent %>%
-  dplyr::select(-DESCRIPTION) %>%
+  #dplyr::select(-DESCRIPTION) %>%
   dplyr::left_join(pottery.sites.freq, by = "POTTERY") %>%
   dplyr::left_join(pottery.sites.area, by = "POTTERY")
 sites.cent <- merge(x = sites, 							# merge sites per style with class (200-year century list)
-                    y = dplyr::select(pottery.cent, -DESCRIPTION), 
+                    y = pottery.cent, 
                     by = "POTTERY", 
                     allow.cartesian = TRUE)
 
@@ -466,6 +495,140 @@ spd.e = rcarbon::spd(
 ymax <- as.data.frame(c14.sel.exp[["ModelRes"]]) ; ymax <- max(ymax$PrDens)			
 bb.rect.ymax <- .45
 
+
+
+# SI: comparision of results from all four models: ----
+
+cowplot::plot_grid(
+  ggplot() + 
+    geom_vline(xintercept = seq(-500, 1500, 500), linetype="dashed", color = "grey") + 
+    
+    geom_ribbon(data = c14.sel.unf[["ModelRes"]], 
+                aes(x = calBCAD, ymin = lo, ymax = hi), alpha = .1) + 
+
+    geom_line(data = c14.sel.exp[["ModelRes"]], # spd from one of the models
+              aes(x = calBCAD, y = PrDens)) + 
+    
+    geom_line(data = spd.e[["grid"]], 
+              aes(x = 1950 - calBP, y = PrDens), 
+              linetype = "dashed") + 
+    
+    geom_rect(data = c14.sel.bb_refined %>%
+                dplyr::filter(MODEL == "uniform"),  
+              aes(xmin = FROM, xmax = TO, ymin = 0, ymax = Inf, fill = rcarbon), alpha = .3) + 
+    
+    ggtitle("Unifrom ") + 
+    
+    scale_fill_manual(values = c("#618cff", "#f8766d")) + 
+    scale_x_continuous("cal BCE/CE", , 
+                       limits = c(-1000, 2000), 
+                       breaks=seq(-1000,1900,100), 
+                       labels = c(seq(1000, 0, -100), seq(100, 1900, 100)),
+                       expand = c(0, 0)) + 
+    scale_y_continuous("Summed probability",
+                       limits = c(0, 1.1 * max(c14.sel.exp[["ModelRes"]]$PrDens)),
+                       expand = c(0, 0)) + 
+    theme_classic() + 
+    theme(legend.position = "none", 
+          axis.title.x = element_text(hjust = .325)),
+  ggplot() + 
+    geom_vline(xintercept = seq(-500, 1500, 500), linetype="dashed", color = "grey") + 
+    
+    geom_ribbon(data = c14.sel.lin[["ModelRes"]], 
+                aes(x = calBCAD, ymin = lo, ymax = hi), alpha = .1) + 
+
+    geom_line(data = c14.sel.exp[["ModelRes"]], # spd from one of the models
+              aes(x = calBCAD, y = PrDens)) + 
+    
+    geom_line(data = spd.e[["grid"]], 
+              aes(x = 1950 - calBP, y = PrDens), 
+              linetype = "dashed") + 
+    
+    geom_rect(data = c14.sel.bb_refined %>%
+                dplyr::filter(MODEL == "linear"),  
+              aes(xmin = FROM, xmax = TO, ymin = 0, ymax = Inf, fill = rcarbon), alpha = .3) + 
+    
+    ggtitle("Linear ") + 
+    
+    scale_fill_manual(values = c("#618cff", "#f8766d")) + 
+    scale_x_continuous("cal BCE/CE", , 
+                       limits = c(-1000, 2000), 
+                       breaks=seq(-1000,1900,100), 
+                       labels = c(seq(1000, 0, -100), seq(100, 1900, 100)),
+                       expand = c(0, 0)) + 
+    scale_y_continuous("Summed probability",
+                       limits = c(0, 1.1 * max(c14.sel.exp[["ModelRes"]]$PrDens)),
+                       expand = c(0, 0)) + 
+    theme_classic() + 
+    theme(legend.position = "none", 
+          axis.title.x = element_text(hjust = .325)),
+  ggplot() + 
+    geom_vline(xintercept = seq(-500, 1500, 500), linetype="dashed", color = "grey") + 
+    
+    geom_ribbon(data = c14.sel.exp[["ModelRes"]], 
+                aes(x = calBCAD, ymin = lo, ymax = hi), alpha = .1) + 
+
+    geom_line(data = c14.sel.exp[["ModelRes"]], # spd from one of the models
+              aes(x = calBCAD, y = PrDens)) + 
+    
+    geom_line(data = spd.e[["grid"]], 
+              aes(x = 1950 - calBP, y = PrDens), 
+              linetype = "dashed") + 
+    
+    geom_rect(data = c14.sel.bb_refined %>%
+                dplyr::filter(MODEL == "exponential"),  
+              aes(xmin = FROM, xmax = TO, ymin = 0, ymax = Inf, fill = rcarbon), alpha = .3) + 
+    
+    ggtitle("Exponential ") + 
+    
+    scale_fill_manual(values = c("#618cff", "#f8766d")) + 
+    scale_x_continuous("cal BCE/CE", , 
+                       limits = c(-1000, 2000), 
+                       breaks=seq(-1000,1900,100), 
+                       labels = c(seq(1000, 0, -100), seq(100, 1900, 100)),
+                       expand = c(0, 0)) + 
+    scale_y_continuous("Summed probability",
+                       limits = c(0, 1.1 * max(c14.sel.exp[["ModelRes"]]$PrDens)),
+                       expand = c(0, 0)) + 
+    theme_classic() + 
+    theme(legend.position = "none", 
+          axis.title.x = element_text(hjust = .325)),
+  ggplot() + 
+    geom_vline(xintercept = seq(-500, 1500, 500), linetype="dashed", color = "grey") + 
+    
+    geom_ribbon(data = c14.sel.log[["ModelRes"]], 
+                aes(x = calBCAD, ymin = lo, ymax = hi), alpha = .1) + 
+    
+    geom_line(data = c14.sel.exp[["ModelRes"]], # spd from one of the models
+              aes(x = calBCAD, y = PrDens)) + 
+    
+    geom_line(data = spd.e[["grid"]], 
+              aes(x = 1950 - calBP, y = PrDens), 
+              linetype = "dashed") + 
+    
+    geom_rect(data = c14.sel.bb_refined %>%
+                dplyr::filter(MODEL == "logistic"),  
+              aes(xmin = FROM, xmax = TO, ymin = 0, ymax = Inf, fill = rcarbon), alpha = .3) + 
+    
+    ggtitle("Logistic ") + 
+    
+    scale_fill_manual(values = c("#618cff", "#f8766d")) + 
+    scale_x_continuous("cal BCE/CE", , 
+                       limits = c(-1000, 2000), 
+                       breaks=seq(-1000,1900,100), 
+                       labels = c(seq(1000, 0, -100), seq(100, 1900, 100)),
+                       expand = c(0, 0)) + 
+    scale_y_continuous("Summed probability",
+                       limits = c(0, 1.1 * max(c14.sel.exp[["ModelRes"]]$PrDens)),
+                       expand = c(0, 0)) + 
+    theme_classic() + 
+    theme(legend.position = "none", 
+          axis.title.x = element_text(hjust = .325)),
+  ncol = 1
+)
+ggsave("output/Fig_SPD_SI.jpg", width = 10.5, height = 16)
+ggsave("output/Fig_SPD_SI.pdf", width = 10.5, height = 16)
+
 spd.test.plt <- ggplot() + 
   geom_vline(xintercept = seq(-500, 1500, 500), linetype="dashed", color = "grey") + 
   
@@ -488,22 +651,20 @@ spd.test.plt <- ggplot() +
             linetype = "dashed") + 
   
   geom_rect(data = c14.sel.bb_refined,  
-            aes(xmin = FROM, xmax = TO, ymin = 0, ymax = bb.rect.ymax, fill = rcarbon), alpha = .1) + 
+            aes(xmin = FROM, xmax = TO, ymin = 0, ymax = Inf, fill = rcarbon), alpha = .1) + 
   scale_fill_manual(values = c("#618cff", "#f8766d")) + 
-  scale_x_continuous("", 
+  scale_x_continuous("cal BCE/CE", , 
                      limits = c(-1000, 2000), 
-                     breaks=seq(-1000,2000,500), 
-                     expand = c(0, 0)) + 
-  scale_y_continuous("Summed probability", 
+                     breaks=seq(-1000,1900,100), 
+                     labels = c(seq(1000, 0, -100), seq(100, 1900, 100)),
+                     expand = c(0, 0), 
+                     position = "top") + 
+  scale_y_continuous("Summed probability",
+                     limits = c(0, 1.1 * max(c14.sel.exp[["ModelRes"]]$PrDens)),
                      expand = c(0, 0)) + 
   theme_classic() + 
-  theme(legend.position = "none") + 
-  theme(axis.title.x = element_blank(), 
-        axis.text.x = element_blank(), 
-        axis.ticks.x = element_blank())
-
-
-
+  theme(legend.position = "none", 
+        axis.title.x = element_text(hjust = .325))
 
 sites.freq.plt <- ggplot(sites.freq.sum, aes(x = class, y = `sum(frq)`)) + 
   geom_vline(xintercept = seq(-500, 1500, 500), linetype="dashed", color = "grey") + 
@@ -585,12 +746,59 @@ dist.plt <- ggplot(pottery.res %>% dplyr::filter(AGE < 1800),
                width = 75) + 
   scale_x_continuous("cal BCE/CE", 
                      limits = c(-1000, 2000), 
-                     breaks = seq(-1000, 2000, 100), 
+                     breaks = seq(-1000, 1900, 100), 
+                     labels = c(seq(1000, 0, -100), seq(100, 1900, 100)),
                      expand = c(0, 0)) +
   scale_y_continuous("Median\ndistance (km)", expand = c(0, 0)) + 
-  theme_classic()
+  theme_classic() +
+  theme(axis.title.x = element_text(hjust = .325))
+
+
+# map ----
+
+bb <- c(xmin = 5, xmax = 40, ymin = -15, ymax = 15)
+
+coast10 <- rnaturalearth::ne_download(scale = 10, type = 'coastline', category = 'physical', returnclass = "sf") %>% sf::st_crop(bb)
+rivers10 <- rnaturalearth::ne_download(scale = 10, type = "rivers_lake_centerlines", category = "physical", returnclass="sf") %>% sf::st_crop(bb)
+lakes10 <- rnaturalearth::ne_download(scale = 10, type = "lakes", category = "physical", returnclass="sf") %>% sf::st_make_valid() %>% sf::st_crop(bb)
+boundary_lines_land10 <- rnaturalearth::ne_download(scale = 10, type = "boundary_lines_land", category = "cultural", returnclass="sf") %>% sf::st_crop(bb)
+
+rainforest <- geojsonsf::geojson_sf("gis/white1983.geojson") %>%
+  st_set_crs(4326) %>%
+  dplyr::filter(DESCRIPTIO %in% c("Anthropic landscapes",
+                                  "Dry forest and thicket",
+                                  "Swamp forest and mangrove",
+                                  "Tropical lowland rainforest"))
+
+
+riversGRIT <- sf::st_read(
+  "gis/GRITv06_segments_simple_AF_EPSG4326.gpkg", 
+  layer = "lines") %>%
+  sf::st_crop(c(xmin = 8, xmax = 28, ymin = -12, ymax = 10))
+
+map <- ggplot() + 
+  geom_sf(data = sf::st_union(rainforest), fill = "lightgrey", color = NA) + 
+  geom_sf(data = coast10, size = .5, color = "darkgrey") + 
+  geom_sf(data = riversGRIT, size = 1, color = "darkgrey") + 
+  geom_sf(data = lakes10, color = "darkgrey", fill = 'darkgrey', color = NA) + 
+  geom_sf(data = boundary_lines_land10, color = 'darkgrey', linetype = "dashed") + 
+  geom_sf(data = c14.sel %>% sf::st_as_sf(crs = 4326, 
+                                      coords = c("LONG", 
+                                                 "LAT"), 
+                                      remove = FALSE,
+                                      na.fail = F), 
+          shape = 3) +
+  geom_sf(data = sites, shape = 3) +
+  scale_x_continuous(breaks = seq(5, 35, 5)) + 
+  scale_y_continuous(breaks = seq(-10, 10, 5)) + 
+  coord_sf(xlim = c(8, 30),
+           ylim = c(7, -8)) + 
+  ggthemes::theme_few()
+
+# plot ----
 
 plt <- cowplot::plot_grid(
+  map,
   spd.test.plt, 
   sites.freq.plt,
   freq.plt,
@@ -600,7 +808,7 @@ plt <- cowplot::plot_grid(
   ncol = 1, 
   align = "v", axis = "lr", 
   labels = "AUTO", 
-  rel_heights = c(2, 1, 1, 1, 1, 1.2))
+  rel_heights = c(6, 2, 1, 1, 1, 1, 1.2))
 
-ggsave("output/Fig_SPD.jpg", plt, width = 10, height = 10)
-ggsave("Fig_SPD.pdf", plt, width = 12, height = 9.75)
+#ggsave("output/Fig_SPD.jpg", plt, width = 10, height = 10)
+ggsave("Fig_SPD.pdf", plt, width = 10.5, height = 16)

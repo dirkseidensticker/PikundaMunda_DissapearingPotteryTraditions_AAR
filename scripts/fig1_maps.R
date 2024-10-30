@@ -22,6 +22,11 @@ osm.rivers.poly <- geojsonsf::geojson_sf("gis/OSM_river_lakes_poly.geojson") %>%
 sf_use_s2(TRUE)
 osm.coast.line <- geojsonsf::geojson_sf("gis/OSM_coast_lines.geojson") %>% sf::st_crop(bb)
 
+riversGRIT <- sf::st_read(
+  "gis/GRITv06_segments_simple_AF_EPSG4326.gpkg", 
+  layer = "lines") %>%
+  sf::st_crop(c(xmin = 8, xmax = 28, ymin = -12, ymax = 10))
+
 sites <- data.table::fread(
   "https://raw.githubusercontent.com/dirkseidensticker/aSCAC/master/sites.csv", 
   encoding = "UTF-8") %>%
@@ -99,7 +104,8 @@ plt.map1 <- ggplot() +
   geom_sf(data = sf::st_union(rainforest), fill = "#73a788", color = NA) + 
   geom_sf(data = refugia, fill = "#478966", color = NA) + 
   geom_sf(data = coast10, size = .5, color = '#44afe3') + 
-  geom_sf(data = rivers10, size = 1, color = '#44afe3') + 
+  #geom_sf(data = rivers10, size = 1, color = '#44afe3') + 
+  geom_sf(data = riversGRIT, size = 1, color = '#44afe3') + 
   geom_sf(data = lakes10, fill = '#44afe3', color = NA) + 
   geom_sf(data = boundary_lines_land10, color = 'black', linetype = "dashed") + 
   geom_rect(aes(xmin = 16, xmax = 17.75, ymin = -1.2, ymax = 2), fill = NA, color = "red") +  
