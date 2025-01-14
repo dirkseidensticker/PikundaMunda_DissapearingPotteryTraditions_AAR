@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14643773.svg)](https://doi.org/10.5281/zenodo.14643773)
+
 # Pikunda-Munda: Disappearance of Pottery Production in the Western Congo Basin at the end of the Early Iron Age
 
 This repository contains all data and scripts required to reproduce the figures in DOI:
